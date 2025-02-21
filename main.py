@@ -10,6 +10,29 @@ import matplotlib.pyplot as plt
 import pandas_ta as ta
 from datetime import datetime, timedelta
 import requests
+from functools import lru_cache
+
+@lru_cache(maxsize=100)
+def get_stock_info(ticker_symbol):
+    try:
+        time.sleep(1)  # Add delay between requests
+        stock = yf.Ticker(ticker_symbol)
+        info = stock.get_fast_info()  # Use fast_info instead of info
+        return info
+    except Exception as e:
+        st.warning(f"Could not fetch info for {ticker_symbol}: {str(e)}")
+        return {}
+
+@lru_cache(maxsize=100)
+def get_stock_history(ticker_symbol, start_date, end_date):
+    try:
+        time.sleep(1)  # Add delay between requests
+        stock = yf.Ticker(ticker_symbol)
+        data = stock.history(start=start_date, end=end_date)
+        return data
+    except Exception as e:
+        st.error(f"Could not fetch history for {ticker_symbol}: {str(e)}")
+        return pd.DataFrame()
 
 def calculate_risk_metrics(data):
     # Ensure data is properly indexed and sorted
