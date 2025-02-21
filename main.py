@@ -126,29 +126,29 @@ def get_usd_to_inr_rate():
     
 USD_TO_INR = get_usd_to_inr_rate()
 
-# def get_popular_tickers():
-#     # List of popular stock tickers
-#     popular_tickers = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NVDA', 'JPM', 'V', 'WMT']
-#     popular_stocks = []
+def get_popular_tickers():
+    # List of popular stock tickers
+    popular_tickers = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NVDA', 'JPM', 'V', 'WMT']
+    popular_stocks = []
     
-#     for ticker_symbol in popular_tickers:
-#         try:
-#             ticker = yf.Ticker(ticker_symbol)
-#             info = ticker.info
-#             if 'regularMarketPrice' in info and info['regularMarketPrice'] is not None:
-#                 price_usd = info['regularMarketPrice']
-#                 price_inr = price_usd * USD_TO_INR
-#                 name = info.get('shortName', ticker_symbol)
+    for ticker_symbol in popular_tickers:
+        try:
+            ticker = yf.Ticker(ticker_symbol)
+            info = ticker.info
+            if 'regularMarketPrice' in info and info['regularMarketPrice'] is not None:
+                price_usd = info['regularMarketPrice']
+                price_inr = price_usd * USD_TO_INR
+                name = info.get('shortName', ticker_symbol)
                 
-#                 popular_stocks.append({
-#                     'Symbol': ticker_symbol,
-#                     'Name': name,
-#                     'Price (₹)': f"₹{price_inr:.2f}"
-#                 })
-#         except Exception as e:
-#             continue
+                popular_stocks.append({
+                    'Symbol': ticker_symbol,
+                    'Name': name,
+                    'Price (₹)': f"₹{price_inr:.2f}"
+                })
+        except Exception as e:
+            continue
             
-#     return pd.DataFrame(popular_stocks)
+    return pd.DataFrame(popular_stocks)
 st.title('Stock Dashboard')
 
 # Sidebar for user input
