@@ -10,29 +10,6 @@ import matplotlib.pyplot as plt
 import pandas_ta as ta
 from datetime import datetime, timedelta
 import requests
-from functools import lru_cache
-
-@lru_cache(maxsize=100)
-def get_stock_info(ticker_symbol):
-    try:
-        time.sleep(1)  # Add delay between requests
-        stock = yf.Ticker(ticker_symbol)
-        info = stock.get_fast_info()  # Use fast_info instead of info
-        return info
-    except Exception as e:
-        st.warning(f"Could not fetch info for {ticker_symbol}: {str(e)}")
-        return {}
-
-@lru_cache(maxsize=100)
-def get_stock_history(ticker_symbol, start_date, end_date):
-    try:
-        time.sleep(1)  # Add delay between requests
-        stock = yf.Ticker(ticker_symbol)
-        data = stock.history(start=start_date, end=end_date)
-        return data
-    except Exception as e:
-        st.error(f"Could not fetch history for {ticker_symbol}: {str(e)}")
-        return pd.DataFrame()
 
 def calculate_risk_metrics(data):
     # Ensure data is properly indexed and sorted
@@ -149,29 +126,29 @@ def get_usd_to_inr_rate():
     
 USD_TO_INR = get_usd_to_inr_rate()
 
-def get_popular_tickers():
-    # List of popular stock tickers
-    popular_tickers = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NVDA', 'JPM', 'V', 'WMT']
-    popular_stocks = []
+# def get_popular_tickers():
+#     # List of popular stock tickers
+#     popular_tickers = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NVDA', 'JPM', 'V', 'WMT']
+#     popular_stocks = []
     
-    for ticker_symbol in popular_tickers:
-        try:
-            ticker = yf.Ticker(ticker_symbol)
-            info = ticker.info
-            if 'regularMarketPrice' in info and info['regularMarketPrice'] is not None:
-                price_usd = info['regularMarketPrice']
-                price_inr = price_usd * USD_TO_INR
-                name = info.get('shortName', ticker_symbol)
+#     for ticker_symbol in popular_tickers:
+#         try:
+#             ticker = yf.Ticker(ticker_symbol)
+#             info = ticker.info
+#             if 'regularMarketPrice' in info and info['regularMarketPrice'] is not None:
+#                 price_usd = info['regularMarketPrice']
+#                 price_inr = price_usd * USD_TO_INR
+#                 name = info.get('shortName', ticker_symbol)
                 
-                popular_stocks.append({
-                    'Symbol': ticker_symbol,
-                    'Name': name,
-                    'Price (₹)': f"₹{price_inr:.2f}"
-                })
-        except Exception as e:
-            continue
+#                 popular_stocks.append({
+#                     'Symbol': ticker_symbol,
+#                     'Name': name,
+#                     'Price (₹)': f"₹{price_inr:.2f}"
+#                 })
+#         except Exception as e:
+#             continue
             
-    return pd.DataFrame(popular_stocks)
+#     return pd.DataFrame(popular_stocks)
 st.title('Stock Dashboard')
 
 # Sidebar for user input
@@ -198,7 +175,7 @@ if ticker:
     data = stock.history(start=start_date, end=end_date)
 
     # Get currency from Yahoo Finance
-    stock_info = stock.get_info()
+    stock_info = stock.info
     currency = stock_info.get('currency', 'USD')  # Default to USD if missing
 
     # Fetch exchange rate dynamically (only if the stock is in USD)
