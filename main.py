@@ -175,7 +175,7 @@ if ticker:
     data = stock.history(start=start_date, end=end_date)
 
     # Get currency from Yahoo Finance
-    stock_info = stock.info
+    stock_info = stock.get_info()
     currency = stock_info.get('currency', 'USD')  # Default to USD if missing
 
     # Fetch exchange rate dynamically (only if the stock is in USD)
